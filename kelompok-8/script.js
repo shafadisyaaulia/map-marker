@@ -1,71 +1,152 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
 
-    // 1. Definisikan Berbagai Jenis Peta (Basemaps)
+    // ── 1. BASEMAPS ──────────────────────────────────────
     const streets = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
-        attribution: '© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     });
 
     const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
         maxZoom: 19,
-        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+        attribution: 'Tiles © Esri'
     });
 
     const dark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
         maxZoom: 19,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+        attribution: '© OpenStreetMap contributors © CARTO'
     });
 
-    // 2. Inisialisasi Peta
-    // Atur peta agar dimulai dengan tampilan 'streets'
+    // ── 2. INISIALISASI MAP ──────────────────────────────
     const map = L.map('map', {
-        layers: [streets] // Peta default saat pertama kali dimuat
+        layers: [streets],
+        zoomControl: false
     });
 
-    // 3. Menambahkan Marker dan Membuat Grup
-    const markerGroup = L.featureGroup(); // Grup untuk menampung semua marker
+    // Zoom control di kanan atas
+    L.control.zoom({ position: 'topright' }).addTo(map);
+    L.control.scale({ imperial: false, position: 'bottomleft' }).addTo(map);
 
-    lokasiMaulizar.forEach(lokasi => {
-        const marker = L.marker([lokasi.lat, lokasi.lng]);
-        
-        // Membuat konten HTML untuk popup yang lebih kaya
-        const popupContent = `
-            <h3>${lokasi.nama}</h3>
-            <p>Koordinat: ${lokasi.lat.toFixed(5)}, ${lokasi.lng.toFixed(5)}</p>
-            <a href="https://www.google.com/maps/search/?api=1&query=${lokasi.lat},${lokasi.lng}" target="_blank">Lihat di Google Maps</a>
-        `;
-        
-        // Ikat popup ke marker dengan kelas CSS kustom
-        marker.bindPopup(popupContent, { className: 'custom-popup' });
+    // ── 3. CUSTOM MARKER ICON ────────────────────────────
+    function makeIcon(number) {
+        const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="34" height="44" viewBox="0 0 34 44">
+          <defs>
+            <linearGradient id="g${number}" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#4f8eff"/>
+              <stop offset="100%" stop-color="#2563eb"/>
+            </linearGradient>
+            <filter id="shadow${number}" x="-30%" y="-10%" width="160%" height="140%">
+              <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#0008"/>
+            </filter>
+          </defs>
+          <path d="M17 2C9.82 2 4 7.82 4 15c0 9.75 13 27 13 27S30 24.75 30 15C30 7.82 24.18 2 17 2z"
+                fill="url(#g${number})" filter="url(#shadow${number})"/>
+          <circle cx="17" cy="15" r="7" fill="rgba(255,255,255,0.2)"/>
+          <text x="17" y="19" text-anchor="middle" font-family="DM Sans,sans-serif"
+                font-size="10" font-weight="700" fill="#fff">${number}</text>
+        </svg>`;
+        return L.divIcon({
+            html: svg,
+            className: '',
+            iconSize: [34, 44],
+            iconAnchor: [17, 44],
+            popupAnchor: [0, -46]
+        });
+    }
 
-        // Tambahkan marker ke grup
+    // ── 4. MARKER & POPUP ────────────────────────────────
+    const markerGroup = L.featureGroup();
+    const markers = [];
+
+    lokasiMaulizar.forEach((lokasi, i) => {
+        const num = i + 1;
+        const marker = L.marker([lokasi.lat, lokasi.lng], { icon: makeIcon(num) });
+
+        const popup = `
+        <div class="popup-inner">
+            <div class="popup-badge">
+                <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+                Lokasi ${num}
+            </div>
+            <div class="popup-name">${lokasi.nama}</div>
+            <span class="popup-coords">📍 ${lokasi.lat.toFixed(6)}, ${lokasi.lng.toFixed(6)}</span>
+            <a class="popup-link"
+               href="https://www.google.com/maps/search/?api=1&query=${lokasi.lat},${lokasi.lng}"
+               target="_blank">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                Buka di Google Maps
+            </a>
+        </div>`;
+
+        marker.bindPopup(popup, { maxWidth: 260, className: '' });
         markerGroup.addLayer(marker);
+        markers.push(marker);
     });
 
-    // Tambahkan grup marker ke peta
     markerGroup.addTo(map);
+    map.fitBounds(markerGroup.getBounds().pad(0.15));
 
-    // 4. Mengatur Tampilan Awal Peta
-    // Peta akan otomatis zoom dan pan agar semua marker terlihat
-    map.fitBounds(markerGroup.getBounds().pad(0.1)); // pad(0.1) memberi sedikit padding
+    // ── 5. SIDEBAR LOCATION LIST ─────────────────────────
+    const listEl = document.getElementById('location-list');
 
-    // 5. Menambahkan Kontrol Peta
-    // Kontrol untuk memilih jenis peta
-    const baseMaps = {
-        "Streets": streets,
-        "Satellite": satellite,
-        "Dark Mode": dark
-    };
-    L.control.layers(baseMaps).addTo(map);
+    lokasiMaulizar.forEach((lokasi, i) => {
+        const li = document.createElement('li');
+        li.className = 'loc-item';
+        li.innerHTML = `
+            <div class="loc-num">${i + 1}</div>
+            <div class="loc-name">${lokasi.nama}</div>`;
+        li.addEventListener('click', () => {
+            map.setView([lokasi.lat, lokasi.lng], 17);
+            markers[i].openPopup();
+            document.querySelectorAll('.loc-item').forEach(el => el.classList.remove('active-loc'));
+            li.classList.add('active-loc');
+        });
+        listEl.appendChild(li);
+    });
 
-    // Kontrol skala peta (di pojok kiri bawah)
-    L.control.scale({ imperial: false }).addTo(map);
+    // ── 6. BASEMAP SWITCHER ──────────────────────────────
+    const basemaps = { streets, satellite, dark };
+    let currentBase = streets;
 
-    // 6. Fungsionalitas Tombol Reset Tampilan
-    const resetZoomBtn = document.getElementById('reset-zoom-btn');
-    resetZoomBtn.addEventListener('click', () => {
-        // Kembalikan tampilan agar semua marker pas di layar
-        map.fitBounds(markerGroup.getBounds().pad(0.1));
+    document.getElementById('basemap-switcher').addEventListener('click', function (e) {
+        const btn = e.target.closest('.basemap-btn');
+        if (!btn) return;
+        const type = btn.dataset.type;
+        if (!basemaps[type] || basemaps[type] === currentBase) return;
+
+        map.removeLayer(currentBase);
+        map.addLayer(basemaps[type]);
+        currentBase = basemaps[type];
+
+        document.querySelectorAll('.basemap-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    });
+
+    // ── 7. KOORDINAT DISPLAY (hover) ─────────────────────
+    const coordsDisplay = document.getElementById('coords-display');
+    map.on('mousemove', function (e) {
+        coordsDisplay.innerHTML = `
+            <svg width="8" height="8" viewBox="0 0 24 24" fill="#3ecf8e"><circle cx="12" cy="12" r="10"/></svg>
+            ${e.latlng.lat.toFixed(6)}, ${e.latlng.lng.toFixed(6)}`;
+    });
+    map.on('mouseout', function () {
+        coordsDisplay.innerHTML = `
+            <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+            Hover peta untuk melihat koordinat`;
+    });
+
+    // ── 8. RESET ─────────────────────────────────────────
+    document.getElementById('reset-zoom-btn').addEventListener('click', () => {
+        map.fitBounds(markerGroup.getBounds().pad(0.15));
+        document.querySelectorAll('.loc-item').forEach(el => el.classList.remove('active-loc'));
+    });
+
+    // Highlight sidebar item saat popup dibuka
+    markers.forEach((m, i) => {
+        m.on('popupopen', () => {
+            document.querySelectorAll('.loc-item').forEach(el => el.classList.remove('active-loc'));
+            listEl.children[i]?.classList.add('active-loc');
+        });
     });
 
 });
