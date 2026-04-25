@@ -55,10 +55,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // ── 4. MARKER & POPUP ────────────────────────────────
+    const lokasi_all = window.semuaLokasi || [];
+    document.querySelector('.brand-sub').textContent = `Banda Aceh · ${lokasi_all.length} Lokasi`;
+
     const markerGroup = L.featureGroup();
     const markers = [];
 
-    lokasiMaulizar.forEach((lokasi, i) => {
+    lokasi_all.forEach((lokasi, i) => {
         const num = i + 1;
         const marker = L.marker([lokasi.lat, lokasi.lng], { icon: makeIcon(num) });
 
@@ -89,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // ── 5. SIDEBAR LOCATION LIST ─────────────────────────
     const listEl = document.getElementById('location-list');
 
-    lokasiMaulizar.forEach((lokasi, i) => {
+    lokasi_all.forEach((lokasi, i) => {
         const li = document.createElement('li');
         li.className = 'loc-item';
         li.innerHTML = `
