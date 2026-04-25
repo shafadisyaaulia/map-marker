@@ -1,5 +1,17 @@
 document.addEventListener('DOMContentLoaded', function () {
 
+    const lokasiData = window.lokasiShafa || window.lokasiMaulizar || [];
+
+    function getGoogleMapsUrl(lokasi) {
+        if (lokasi.mapsUrl) return lokasi.mapsUrl;
+        return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${lokasi.lat},${lokasi.lng}`)}`;
+    }
+
+    if (!Array.isArray(lokasiData) || lokasiData.length === 0) {
+        console.warn('Data lokasi belum tersedia. Pastikan file data sudah ter-load.');
+        return;
+    }
+
     // ── 1. BASEMAPS ──────────────────────────────────────
     const streets = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
@@ -58,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const markerGroup = L.featureGroup();
     const markers = [];
 
-    lokasiMaulizar.forEach((lokasi, i) => {
+    lokasiData.forEach((lokasi, i) => {
         const num = i + 1;
         const marker = L.marker([lokasi.lat, lokasi.lng], { icon: makeIcon(num) });
 
@@ -71,8 +83,9 @@ document.addEventListener('DOMContentLoaded', function () {
             <div class="popup-name">${lokasi.nama}</div>
             <span class="popup-coords">📍 ${lokasi.lat.toFixed(6)}, ${lokasi.lng.toFixed(6)}</span>
             <a class="popup-link"
-               href="https://www.google.com/maps/search/?api=1&query=${lokasi.lat},${lokasi.lng}"
-               target="_blank">
+               href="${getGoogleMapsUrl(lokasi)}"
+               target="_blank"
+               rel="noopener noreferrer">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                 Buka di Google Maps
             </a>
@@ -89,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // ── 5. SIDEBAR LOCATION LIST ─────────────────────────
     const listEl = document.getElementById('location-list');
 
-    lokasiMaulizar.forEach((lokasi, i) => {
+    lokasiData.forEach((lokasi, i) => {
         const li = document.createElement('li');
         li.className = 'loc-item';
         li.innerHTML = `
