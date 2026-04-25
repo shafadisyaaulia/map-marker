@@ -1,4 +1,6 @@
-const lokasiMaulizar = [
+if (!window.semuaLokasi) window.semuaLokasi = [];
+
+window.semuaLokasi.push(...[
   {
     nama: "Masjid Raya Baiturrahman, Jl. Moh. Jam No.1, Kp. Baru, Kec. Baiturrahman, Kota Banda Aceh, Aceh 23127",
     lat: 5.5536492,
@@ -29,4 +31,4 @@ const lokasiMaulizar = [
     lat: 5.5497863,
     lng: 95.3366611
   }
-];
+]);
