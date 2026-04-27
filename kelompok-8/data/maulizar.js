@@ -30,5 +30,20 @@ window.semuaLokasi.push(...[
     nama: "Masjid Haji Keuchik Leumiek, Lamseupeung, Kec. Lueng Bata, Kota Banda Aceh, Aceh 23127",
     lat: 5.5497863,
     lng: 95.3366611
+  },
+  {
+  nama: "Masjid Fathun Qarib UIN Ar-Raniry, Kopelma Darussalam, Kec. Syiah Kuala, Kota Banda Aceh, Aceh",
+  lat: 5.57761,
+  lng: 95.36923
+  },
+  {
+  nama: "Masjid Baitul Muttaqin, Kopelma Darussalam, Kec. Syiah Kuala, Kota Banda Aceh, Aceh 24415",
+  lat: 5.57871,
+  lng: 95.36326
+  },
+  {
+  nama: "Masjid Jami' Darussalam, Kopelma Darussalam, Kec. Syiah Kuala, Kota Banda Aceh, Aceh 24415",
+  lat: 5.57133,
+  lng: 95.37143
   }
 ]);
