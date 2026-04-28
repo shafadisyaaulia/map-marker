@@ -1,12 +1,7 @@
 if (!window.semuaLokasi) window.semuaLokasi = [];
 
 const lokasiDea = [
- // TK & PAUD
-  { nama: "TK Pertiwi Banda Aceh", lat: 5.553255, lng: 95.317282, mapsUrl: "https://www.google.com/maps?q=5.553255,95.317282" },
-  { nama: "TK Al-Azhar Syifa Budi", lat: 5.568900, lng: 95.334500, mapsUrl: "https://www.google.com/maps?q=5.5689,95.3345" },
-  { nama: "PAUD Kasih Ibu", lat: 5.541200, lng: 95.325600, mapsUrl: "https://www.google.com/maps?q=5.5412,95.3256" },
-  
-  // SD
+// SD
   { nama: "SD Negeri 1 Banda Aceh", lat: 5.5528423, lng: 95.3130464, mapsUrl: "https://www.google.com/maps?q=5.5528423,95.3130464" },
   { nama: "SD Negeri 2 Banda Aceh", lat: 5.5523193, lng: 95.311225, mapsUrl: "https://www.google.com/maps?q=5.5523193,95.311225" },
   { nama: "SD Negeri 3 Banda Aceh", lat: 5.5513045, lng: 95.32135, mapsUrl: "https://www.google.com/maps?q=5.5513045,95.32135" },
