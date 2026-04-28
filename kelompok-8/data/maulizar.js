@@ -1,6 +1,4 @@
-if (!window.semuaLokasi) window.semuaLokasi = [];
-
-window.semuaLokasi.push(
+const lokasiMaulizar = [
   {
     nama: "Masjid Raya Baiturrahman",
     lat: 5.553916868607073,
@@ -151,4 +149,6 @@ window.semuaLokasi.push(
     lng: 95.27012230218816,
     mapsUrl: "https://maps.app.goo.gl/3zD2Fq7vzLBgYoXK6"
   }
-);
+];
+
+window.lokasiMaulizar = lokasiMaulizar;
