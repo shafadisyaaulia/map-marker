@@ -5,9 +5,10 @@ const lokasiShafa = [
     { nama: "Kupi Nanggroe", lat: 5.547505355631043, lng: 95.3296540245518, mapsUrl: "https://maps.app.goo.gl/CqVn66cx5J55KTw58" },
     { nama: "Budi Warkop", lat: 5.548586151913475, lng: 95.33006123072647, mapsUrl: "https://maps.app.goo.gl/nJWi3RSVVvUo7kaE7" },
     { nama: "Kupi Khop", lat: 5.538093976918391, lng: 95.31467715919128, mapsUrl: "https://maps.app.goo.gl/v9MyqdraYRxN2PBMA" },
-    { nama: "Canai Mamak KL", lat: 5.550640, lng: 95.317220, mapsUrl: "https://www.google.com/maps/search/?api=1&query=5.550640,95.317220" },
-    { nama: "Rumoh Kupi Premium", lat: 5.546180, lng: 95.328540, mapsUrl: "https://www.google.com/maps/search/?api=1&query=5.546180,95.328540" }
+    { nama: "Omega Kupi", lat: 5.551307686295688, lng: 95.32885175896966, mapsUrl: "https://maps.app.goo.gl/jMouTHo3FoEUsCCP9" },
+    { nama: "Boss's Kupi", lat: 5.555703488525061, lng: 95.32928066849394, mapsUrl: "https://maps.app.goo.gl/JGujHz3HAPuvrBym8" },
+    { nama: "Kulam Kupi", lat: 5.5559603904174155, lng: 95.32758105149858, mapsUrl: "https://maps.app.goo.gl/bYjAxm4GhWN1gafh9" },
+    { nama: "D'pos Kupi", lat: 5.5557651953164715, lng: 95.32566008318285, mapsUrl: "https://maps.app.goo.gl/J8Di1Yv8UBXQuCTAA" },
 ];
 
 window.lokasiShafa = lokasiShafa;
-window.lokasiMaulizar = lokasiShafa;
