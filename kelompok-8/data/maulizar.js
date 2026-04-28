@@ -177,3 +177,6 @@ window.semuaLokasi.push(...[
     url: "https://maps.app.goo.gl/3zD2Fq7vzLBgYoXK6"
   }
 ]);
+
+window.lokasiShafa = lokasiMaulizar;
+window.lokasiMaulizar = lokasiMaulizar;
