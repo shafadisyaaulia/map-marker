@@ -181,4 +181,66 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // ── 9. CATEGORY FILTER ───────────────────────────────
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const activeCategories = new Set(['warung', 'sekolah', 'masjid']);
+    const categoryCounts = { warung: 0, sekolah: 0, masjid: 0 };
+
+    // Hitung total setiap kategori dari data aktual
+    lokasiData.forEach(loc => {
+        if (categoryCounts[loc.kategori] !== undefined) {
+            categoryCounts[loc.kategori]++;
+        }
+    });
+
+    // Render filter text numbers dan set event listener
+    filterBtns.forEach(btn => {
+        const cat = btn.dataset.kategori;
+        
+        // Sesuaikan warnanya untuk match dengan kategori if active (optional, kita pakai --accent dari css)
+        // Set count yang benar
+        const countSpan = btn.querySelector('.filter-count');
+        if(countSpan) countSpan.textContent = categoryCounts[cat] || 0;
+
+        btn.addEventListener('click', () => {
+            // Toggle active state
+            if (activeCategories.has(cat)) {
+                activeCategories.delete(cat);
+                btn.classList.remove('filter-active');
+            } else {
+                activeCategories.add(cat);
+                btn.classList.add('filter-active');
+            }
+            updateFilters();
+        });
+    });
+
+    // Fungsi untuk memperbarui marker di map dan sidebar
+    function updateFilters() {
+        markerGroup.clearLayers();
+        const sidebarItems = listEl.children;
+
+        let activeCount = 0;
+
+        lokasiData.forEach((lokasi, i) => {
+            const isVisible = activeCategories.has(lokasi.kategori);
+            
+            // Tampilkan / Sembunyikan marker di peta
+            if (isVisible) {
+                markerGroup.addLayer(markers[i]);
+                activeCount++;
+            }
+            
+            // Tampilkan / Sembunyikan item di sidebar
+            if (sidebarItems[i]) {
+                sidebarItems[i].style.display = isVisible ? 'flex' : 'none';
+            }
+        });
+        
+        // Paskan view kamera peta dengan bounds lokasi yang baru
+        if (activeCount > 0 && markerGroup.getLayers().length > 0) {
+            map.flyToBounds(markerGroup.getBounds().pad(0.15), { duration: 0.5 });
+        }
+    }
+
 });
