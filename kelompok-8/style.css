@@ -3,18 +3,18 @@
    ============================================ */
 
 :root {
-    --bg:         #0f1117;
-    --surface:    #191c26;
-    --surface2:   #1f2333;
-    --border:     rgba(255,255,255,0.07);
-    --accent:     #4f8eff;
-    --accent2:    #7ab8ff;
-    --text:       #e8eaf0;
-    --text-muted: #6b7390;
-    --success:    #3ecf8e;
+    --bg:         #f4f7fb;
+    --surface:    #ffffff;
+    --surface2:   #f6f8fc;
+    --border:     #dbe3ee;
+    --accent:     #1d4ed8;
+    --accent2:    #2563eb;
+    --text:       #172033;
+    --text-muted: #5c6b84;
+    --success:    #047857;
     --radius:     12px;
-    --sidebar-w:  300px;
-    --shadow-card: 0 8px 32px rgba(0,0,0,0.45);
+    --sidebar-w:  310px;
+    --shadow-card: 0 10px 28px rgba(23,32,51,0.12);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -62,7 +62,7 @@ html, body {
     width: 46px;
     height: 46px;
     border-radius: 14px;
-    background: linear-gradient(135deg, var(--accent), #2563eb);
+    background: var(--accent);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -71,7 +71,7 @@ html, body {
     font-weight: 400;
     color: #fff;
     letter-spacing: 0.02em;
-    box-shadow: 0 4px 16px rgba(79,142,255,0.35);
+    box-shadow: 0 6px 16px rgba(29,78,216,0.18);
     flex-shrink: 0;
 }
 
@@ -136,8 +136,8 @@ html, body {
 
 .basemap-btn.active {
     border-color: var(--accent);
-    background: rgba(79,142,255,0.12);
-    color: var(--accent2);
+    background: rgba(29,78,216,0.08);
+    color: var(--accent);
 }
 
 .basemap-icon { font-size: 18px; }
@@ -164,13 +164,13 @@ html, body {
 
 .loc-item:hover {
     border-color: var(--accent);
-    background: rgba(79,142,255,0.08);
+    background: rgba(29,78,216,0.05);
     transform: translateX(2px);
 }
 
 .loc-item.active-loc {
     border-color: var(--accent);
-    background: rgba(79,142,255,0.15);
+    background: rgba(29,78,216,0.10);
 }
 
 .loc-num {
@@ -188,11 +188,70 @@ html, body {
     margin-top: 1px;
 }
 
+.loc-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
 .loc-name {
     font-size: 12px;
     line-height: 1.45;
     color: var(--text);
 }
+
+.loc-tag {
+    display: inline-flex;
+    align-self: flex-start;
+    padding: 3px 8px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+/* Legend */
+.legend-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface2);
+    padding: 12px;
+}
+
+.legend-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text);
+    padding: 6px 0;
+}
+
+.legend-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    color: #fff;
+}
+
+.legend-warung { background: #c2410c; }
+.legend-sekolah { background: #1d4ed8; }
+.legend-masjid { background: #047857; }
 
 /* Reset Button */
 .reset-btn {
@@ -288,9 +347,9 @@ html, body {
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    background: rgba(79,142,255,0.15);
-    border: 1px solid rgba(79,142,255,0.3);
-    color: var(--accent2);
+    background: var(--badge-bg, rgba(29,78,216,0.08));
+    border: 1px solid var(--badge-border, rgba(29,78,216,0.2));
+    color: var(--badge-text, var(--accent));
     font-size: 10px;
     font-weight: 600;
     letter-spacing: 0.08em;
@@ -326,7 +385,7 @@ html, body {
     gap: 6px;
     width: 100%;
     padding: 9px 12px;
-    background: linear-gradient(135deg, var(--accent), #2563eb);
+    background: var(--accent);
     color: #fff;
     text-decoration: none;
     font-size: 12px;

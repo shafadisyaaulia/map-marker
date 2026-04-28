@@ -1,12 +1,22 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    // Combine semua data dari ketiga anggota
+    const kategoriInfo = {
+        warung: { label: 'Warung Kopi', color: '#c2410c', icon: '☕' },
+        sekolah: { label: 'Sekolah', color: '#1d4ed8', icon: '🏫' },
+        masjid: { label: 'Masjid', color: '#047857', icon: '🕌' }
+    };
+
+    function tagKategori(lokasiList, kategori) {
+        return (lokasiList || []).map(lokasi => ({ ...lokasi, kategori }));
+    }
+
+    // Combine semua data dari ketiga anggota, lalu beri kategori di sini
     const semuaLokasi = [
-        ...(window.lokasiShafa || []),
-        ...(window.lokasiDea || []),
-        ...(window.lokasiMaulizar || [])
+        ...tagKategori(window.lokasiShafa, 'warung'),
+        ...tagKategori(window.lokasiDea, 'sekolah'),
+        ...tagKategori(window.lokasiMaulizar, 'masjid')
     ];
-    
+
     const lokasiData = semuaLokasi.length > 0 ? semuaLokasi : [];
 
     function getGoogleMapsUrl(lokasi) {
@@ -45,25 +55,19 @@ document.addEventListener('DOMContentLoaded', function () {
     L.control.zoom({ position: 'topright' }).addTo(map);
     L.control.scale({ imperial: false, position: 'bottomleft' }).addTo(map);
 
-    // ── 3. CUSTOM MARKER ICON ────────────────────────────
-    function makeIcon(number) {
+        // ── 3. CUSTOM MARKER ICON ────────────────────────────
+        function makeIcon(number, kategori) {
+                const info = kategoriInfo[kategori] || { color: '#475569', icon: '📍', label: 'Lokasi' };
         const svg = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="34" height="44" viewBox="0 0 34 44">
-          <defs>
-            <linearGradient id="g${number}" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#4f8eff"/>
-              <stop offset="100%" stop-color="#2563eb"/>
-            </linearGradient>
-            <filter id="shadow${number}" x="-30%" y="-10%" width="160%" height="140%">
-              <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#0008"/>
-            </filter>
-          </defs>
-          <path d="M17 2C9.82 2 4 7.82 4 15c0 9.75 13 27 13 27S30 24.75 30 15C30 7.82 24.18 2 17 2z"
-                fill="url(#g${number})" filter="url(#shadow${number})"/>
-          <circle cx="17" cy="15" r="7" fill="rgba(255,255,255,0.2)"/>
-          <text x="17" y="19" text-anchor="middle" font-family="DM Sans,sans-serif"
-                font-size="10" font-weight="700" fill="#fff">${number}</text>
-        </svg>`;
+                <svg xmlns="http://www.w3.org/2000/svg" width="34" height="44" viewBox="0 0 34 44">
+                    <path d="M17 2C9.82 2 4 7.82 4 15c0 9.75 13 27 13 27S30 24.75 30 15C30 7.82 24.18 2 17 2z"
+                                fill="${info.color}"/>
+                    <circle cx="17" cy="16" r="8.5" fill="#ffffff" opacity="0.96"/>
+                    <text x="17" y="18.2" text-anchor="middle" font-family="DM Sans,sans-serif"
+                                font-size="10" font-weight="700" fill="${info.color}">${info.icon}</text>
+                    <text x="17" y="29" text-anchor="middle" font-family="DM Sans,sans-serif"
+                                font-size="7" font-weight="700" fill="#ffffff">${number}</text>
+                </svg>`;
         return L.divIcon({
             html: svg,
             className: '',
@@ -82,13 +86,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     lokasiData.forEach((lokasi, i) => {
         const num = i + 1;
-        const marker = L.marker([lokasi.lat, lokasi.lng], { icon: makeIcon(num) });
+        const info = kategoriInfo[lokasi.kategori] || kategoriInfo.warung;
+        const marker = L.marker([lokasi.lat, lokasi.lng], { icon: makeIcon(num, lokasi.kategori) });
 
         const popup = `
         <div class="popup-inner">
-            <div class="popup-badge">
+            <div class="popup-badge" style="--badge-bg:${info.color}20; --badge-border:${info.color}40; --badge-text:${info.color};">
                 <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
-                Lokasi ${num}
+                ${info.label} ${num}
             </div>
             <div class="popup-name">${lokasi.nama}</div>
             <span class="popup-coords">📍 ${lokasi.lat.toFixed(6)}, ${lokasi.lng.toFixed(6)}</span>
@@ -113,11 +118,15 @@ document.addEventListener('DOMContentLoaded', function () {
     const listEl = document.getElementById('location-list');
 
     lokasiData.forEach((lokasi, i) => {
+        const info = kategoriInfo[lokasi.kategori] || kategoriInfo.warung;
         const li = document.createElement('li');
         li.className = 'loc-item';
         li.innerHTML = `
-            <div class="loc-num">${i + 1}</div>
-            <div class="loc-name">${lokasi.nama}</div>`;
+            <div class="loc-num" style="background:${info.color};">${i + 1}</div>
+            <div class="loc-meta">
+                <div class="loc-name">${lokasi.nama}</div>
+                <div class="loc-tag" style="color:${info.color}; background:${info.color}14;">${info.label}</div>
+            </div>`;
         li.addEventListener('click', () => {
             map.setView([lokasi.lat, lokasi.lng], 17);
             markers[i].openPopup();

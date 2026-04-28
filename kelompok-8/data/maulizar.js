@@ -1,4 +1,4 @@
-const lokasiMaulizar = [
+window.lokasiMaulizar = [
   {
     nama: "Masjid Raya Baiturrahman",
     lat: 5.553916868607073,
@@ -48,6 +48,12 @@ const lokasiMaulizar = [
     mapsUrl: "https://maps.app.goo.gl/o1qdsaSScUNjyxRf6"
   },
   {
+    nama: "Masjid Jamik Kopelma Darussalam",
+    lat: 5.572793916201932,
+    lng: 95.3559993912092,
+    mapsUrl: "https://maps.app.goo.gl/hSApZt5gWnDnyn1z5"
+  },
+];
     nama: "Masjid Jami' Darussalam",
     lat: 5.572502828310301,
     lng: 95.37173082128436,
@@ -149,6 +155,11 @@ const lokasiMaulizar = [
     lng: 95.27012230218816,
     mapsUrl: "https://maps.app.goo.gl/3zD2Fq7vzLBgYoXK6"
   }
+<<<<<<< Updated upstream
 ];
 
 window.lokasiMaulizar = lokasiMaulizar;
+=======
+);
+
+>>>>>>> Stashed changes
